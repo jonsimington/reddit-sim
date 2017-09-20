@@ -2,3 +2,6 @@
 *~
 \#*\#
 .\#*
+
+# compiled python, eww
+*.pyc
