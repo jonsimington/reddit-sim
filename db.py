@@ -8,18 +8,25 @@
 import couchdb
 from secret_settings import couch_user, couch_pass, couch_host, couch_port
 
-def init_db():
+def init_dbs():
+    databases = ['submissions',]
+
+    dbs = {}
+
     try:
         c = couchdb.Server("http://{}:{}@{}:{}".format(couch_user, couch_pass, couch_host, couch_port))
         print("Connected to CouchDB at %s:%s" % (couch_host, couch_port))
     except couchdb.http.Unauthorized:
         print("CouchDB credentials are incorrect.")
 
-    try:
-        db = c['reddit-sim']
-        print("Loaded DB 'reddit-sim'")
-    except couchdb.http.ResourceNotFound:
-        db = c.create('reddit-sim')
-        print("Created DB 'reddit-sim'")
+    for d in databases:
+        try:
+            db = c[d]
+            print("Loaded DB '%s'" % d)
+        except couchdb.http.ResourceNotFound:
+            db = c.create(d)
+            print("Created DB '%s'" % d)
 
-    return db
+        dbs.update({d:db})
+
+    return dbs

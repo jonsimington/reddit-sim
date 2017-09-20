@@ -6,11 +6,11 @@
 # Author: Jon Simington
 # Created: Tue Sep 19 21:16:45 2017 (-0500)
 from reddit_helpers import init_reddit, get_submissions
-from db import init_db
+from db import init_dbs
 
 if __name__ == "__main__":
     r = init_reddit()
 
-    db = init_db()
+    dbs = init_dbs()
 
     submissions = get_submissions(r, 'all', limit=10)
