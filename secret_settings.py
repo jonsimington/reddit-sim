@@ -1,2 +1,8 @@
 r_username = ''
 r_password = ''
+client_id = ''
+client_secret = ''
+couch_user = ''
+couch_pass = ''
+couch_host = ''
+couch_port = ''
