@@ -22,11 +22,25 @@ def init_dbs():
     for d in databases:
         try:
             db = c[d]
-            print("Loaded DB '%s'" % d)
+            print("Loaded DB '%s'." % d)
         except couchdb.http.ResourceNotFound:
             db = c.create(d)
-            print("Created DB '%s'" % d)
+            print("Created DB '%s'." % d)
 
         dbs.update({d:db})
 
     return dbs
+
+def store_submission(db, submission):
+
+    doc = {
+        '_id': submission.id,
+        'title': submission.title,
+        'submitter': submission.author.name
+    }
+
+    try:
+        db.save(doc)
+        print("Created submission %s." % doc['_id'])
+    except couchdb.http.ResourceConflict:
+        print("Submission %s already exists." % doc['_id'])
