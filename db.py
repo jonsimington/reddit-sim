@@ -7,11 +7,13 @@
 # Created: Tue Sep 19 22:25:45 2017 (-0500)
 import couchdb
 from secret_settings import couch_user, couch_pass, couch_host, couch_port
+import logging
 
 def init_dbs():
     databases = [
         'submissions',
         'comments',
+        'redditors',
     ]
 
     dbs = {}
@@ -44,9 +46,9 @@ def store_submission(db, submission):
 
     try:
         db.save(doc)
-        print("Created submission %s." % doc['_id'])
+        logging.debug("Created submission %s." % doc['_id'])
     except couchdb.http.ResourceConflict:
-        print("Submission %s already exists." % doc['_id'])
+        logging.debug("Submission %s already exists." % doc['_id'])
 
 def store_comment(db, comment):
     try:
@@ -60,8 +62,24 @@ def store_comment(db, comment):
 
         try:
             db.save(doc)
-            print("Created comment %s." % doc['_id'])
+            logging.debug("Created comment %s." % doc['_id'])
         except couchdb.http.ResourceConflict:
-            print("Comment %s already exists." % doc['_id'])
+            logging.debug("Comment %s already exists." % doc['_id'])
+    except:
+        pass
+
+
+def store_redditor(db, redditor):
+    try:
+        doc = {
+            '_id': redditor.name,
+            'name': redditor.name
+        }
+
+        try:
+            db.save(doc)
+            logging.debug("Created redditor %s." % doc['name'])
+        except couchdb.http.ResourceConflict:
+            logging.debug("Redditor %s already exists." % doc['name'])
     except:
         pass
