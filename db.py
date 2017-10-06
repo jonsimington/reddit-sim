@@ -90,18 +90,15 @@ def store_redditor(db, redditor):
         logging.debug("Error storing redditor.  Name field probably `None`")
 
 
-def get_and_store_submissions(r, limit):
-    dbs = init_dbs()
-
+def get_and_store_submissions(r, dbs, limit):
     submissions_store = dbs['submissions']
     comments_store = dbs['comments']
     redditors_store = dbs['redditors']
 
     submissions = get_submissions(r, 'all', limit=limit)
 
-
-
     print('-' * 80)
+
     for s in submissions:
         store_submission(submissions_store, s)
         store_redditor(redditors_store, s.author)
