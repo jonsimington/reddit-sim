@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
     db = init_dbs()
 
-    print(mock_comment(db))
+    print(mock_comment(db, subreddit='pics'))
 
     # fetch n submissions from reddit, store submissions, comments & redditors in db
     #get_and_store_submissions(r, db, limit=200)

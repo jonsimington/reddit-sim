@@ -25,14 +25,23 @@ def mock_submission_title(db):
     return mocked_title
 
 def mock_comment(db, **kwargs):
+    mocked_comment = ""
+
     comments_store = db['comments']
-    comments_view = comments_store.view('commentsView/comment_words')
+    comments_view = comments_store.view('commentsView/comment_words', include_docs=True)
 
-    logging.info('Mocking comment based on %s comments' % len(comments_view))
+    if 'subreddit' in kwargs:
+        subreddit = kwargs['subreddit']
+        comments_view = [c for c in comments_view if c.doc['subreddit']==subreddit]
 
-    comments = ' '.join([c.value for c in comments_view])
-    comments_model = markovify.Text(comments)
+        print('Mocking comment based on %s comments from /r/%s' % (len(comments_view), subreddit))
 
-    mocked_comment = comments_model.make_sentence()
+    if len(comments_view) > 0:
+        comments = ' '.join([c.value for c in comments_view])
+        comments_model = markovify.Text(comments)
+
+        mocked_comment = comments_model.make_sentence()
+    else:
+        logging.error('Filter applied to mock_comment resulted in 0 documents.')
 
     return mocked_comment
