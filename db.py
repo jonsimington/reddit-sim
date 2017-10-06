@@ -97,6 +97,8 @@ def get_and_store_submissions(r, dbs, limit):
 
     submissions = get_submissions(r, 'all', limit=limit)
 
+    print('Fetching %s submissions' % limit)
+
     print('-' * 80)
 
     for s in submissions:
