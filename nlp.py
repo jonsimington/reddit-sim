@@ -26,21 +26,30 @@ def mock_submission_title(db):
 
 def mock_comment(db, **kwargs):
     mocked_comment = ""
+    filtered = False
 
     comments_store = db['comments']
     comments_view = comments_store.view('commentsView/comment_words', include_docs=True)
 
     if 'subreddit' in kwargs:
+        filtered = True
         subreddit = kwargs['subreddit']
         comments_view = [c for c in comments_view if c.doc['subreddit']==subreddit]
         print('Mocking comment based on %s comments from /r/%s' % (len(comments_view), subreddit))
 
     if 'author' in kwargs:
+        filtered = True
         author = kwargs['author']
         comments_view = [c for c in comments_view if c.doc['author']==author]
         print('Mocking comment based on %s comments by /u/%s' % (len(comments_view), author))
 
-    if 'subreddit' not in kwargs and 'author' not in kwargs:
+    if 'submission' in kwargs:
+        filtered = True
+        submission = kwargs['submission']
+        comments_view = [c for c in comments_view if c.doc['submission']==submission]
+        print('Mocking comment based on %s comments from submission %s' % (len(comments_view), submission))
+
+    if not filtered:
         print('Mocking comment based on %s comments' % len(comments_view))
 
 
