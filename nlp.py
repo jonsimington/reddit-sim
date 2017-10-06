@@ -33,8 +33,16 @@ def mock_comment(db, **kwargs):
     if 'subreddit' in kwargs:
         subreddit = kwargs['subreddit']
         comments_view = [c for c in comments_view if c.doc['subreddit']==subreddit]
-
         print('Mocking comment based on %s comments from /r/%s' % (len(comments_view), subreddit))
+
+    if 'author' in kwargs:
+        author = kwargs['author']
+        comments_view = [c for c in comments_view if c.doc['author']==author]
+        print('Mocking comment based on %s comments by /u/%s' % (len(comments_view), author))
+
+    if 'subreddit' not in kwargs and 'author' not in kwargs:
+        print('Mocking comment based on %s comments' % len(comments_view))
+
 
     if len(comments_view) > 0:
         comments = ' '.join([c.value for c in comments_view])
